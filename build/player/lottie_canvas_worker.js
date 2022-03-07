@@ -13964,20 +13964,22 @@ GroupEffect.prototype.init = function (data, element) {
       animation.onError = function (error) {
         console.log('ERRORO', error); // eslint-disable-line
       };
-      if (params.renderer === 'svg') {
-        animation.addEventListener('DOMLoaded', function () {
+      animation.addEventListener('DOMLoaded', function () {
+        if (params.renderer === 'svg') {   
           var serialized = wrapper.serialize();
           addElementToList(wrapper, elements);
-          self.postMessage({
-            type: 'loaded',
-            payload: {
-              id: payload.id,
-              tree: serialized.children[0],
-              totalFrames: animation.totalFrames,
-              frameRate: animation.frameRate,
-            },
-          });
+        }
+        self.postMessage({
+          type: 'loaded',
+          payload: {
+            id: payload.id,
+            tree: serialized && serialized.children[0],
+            totalFrames: animation.totalFrames,
+            frameRate: animation.frameRate,
+          },
         });
+      });
+      if (params.renderer === 'svg') {
         animation.addEventListener('drawnFrame', function (event) {
           var changedElements = [];
           var element;
@@ -14193,9 +14195,11 @@ var lottie = (function () {
       });
       animation.animInstance.totalFrames = payload.totalFrames;
       animation.animInstance.frameRate = payload.frameRate;
-      var container = animation.container;
-      var elements = animation.elements;
-      createTree(payload.tree, container, elements);
+      if (payload.tree) {  
+        var container = animation.container;
+        var elements = animation.elements;
+        createTree(payload.tree, container, elements);
+      }
     };
   }());
 
