@@ -13965,7 +13965,7 @@ GroupEffect.prototype.init = function (data, element) {
         console.log('ERRORO', error); // eslint-disable-line
       };
       animation.addEventListener('DOMLoaded', function () {
-        if (params.renderer === 'svg') {   
+        if (params.renderer === 'svg') {
           var serialized = wrapper.serialize();
           addElementToList(wrapper, elements);
         }
